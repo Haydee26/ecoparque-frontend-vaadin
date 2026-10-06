@@ -1,4 +1,35 @@
-/* Add your styles here */
+@import "./theme-editor.css";
+/* ===== Paleta EcoParque ===== */
+html {
+    --aura-accent-color-light: #4f7a3c;
+    --aura-accent-color-dark: #8fbf73;
+    --aura-background-color-light: #fbf7ee;
+    --aura-base-radius: 8;
+}
+
 html, body {
     background-color: #fbf7ee !important;
+}
+
+h2 {
+    color: #2f4a2a;
+    border-bottom: 3px solid #7a8c5d;
+    padding-bottom: 0.4rem;
+}
+
+vaadin-grid {
+    background-color: #ffffff;
+    border: 1px solid #c9d6b6;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(70, 60, 40, 0.15);
+}
+
+vaadin-grid::part(header-cell) {
+    background-color: #dce8cc;
+    color: #2f4a2a;
+    font-weight: 700;
+}
+
+vaadin-grid::part(even-row-cell) {
+    background-color: #f4f1e3;
 }

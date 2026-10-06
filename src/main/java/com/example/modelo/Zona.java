@@ -1,11 +1,12 @@
 package com.example.modelo;
 
-public class Zona {
+public class Zona implements Identificable {
 
     private Long id;
     private String nombre;
     private Double extension;
 
+    @Override
     public Long getId() {
         return id;
     }
