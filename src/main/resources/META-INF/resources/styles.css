@@ -1,1 +1,4 @@
 /* Add your styles here */
+html, body {
+    background-color: #fbf7ee !important;
+}
