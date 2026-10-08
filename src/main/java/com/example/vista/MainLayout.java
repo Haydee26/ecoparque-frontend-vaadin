@@ -19,7 +19,7 @@ public class MainLayout extends AppLayout {
 
     public MainLayout(SesionUsuario sesion) {
         addToNavbar(crearEncabezado(sesion));
-        addToDrawer(crearMenu());
+        addToDrawer(crearMenu(sesion));
     }
 
     private HorizontalLayout crearEncabezado(SesionUsuario sesion) {
@@ -46,7 +46,7 @@ public class MainLayout extends AppLayout {
         return encabezado;
     }
 
-    private SideNav crearMenu() {
+    private SideNav crearMenu(SesionUsuario sesion) {
         SideNav menu = new SideNav();
         menu.addItem(new SideNavItem("Dashboard", InicioView.class, VaadinIcon.HOME.create()));
         menu.addItem(new SideNavItem("Zonas", ZonaView.class, VaadinIcon.MAP_MARKER.create()));
@@ -55,6 +55,12 @@ public class MainLayout extends AppLayout {
         menu.addItem(new SideNavItem("Itinerarios", ItinerarioView.class, VaadinIcon.FLAG.create()));
         menu.addItem(new SideNavItem("Guías", GuiaView.class, VaadinIcon.USER.create()));
         menu.addItem(new SideNavItem("Cuidadores", CuidadorView.class, VaadinIcon.USERS.create()));
+        menu.addItem(new SideNavItem("Asignaciones", AsignacionGuiaView.class, VaadinIcon.CALENDAR.create()));
+        menu.addItem(new SideNavItem("Responsabilidades", ResponsabilidadCuidadorView.class,
+                VaadinIcon.CLIPBOARD.create()));
+        if (sesion.esAdministrador()) {
+            menu.addItem(new SideNavItem("Usuarios", UsuarioView.class, VaadinIcon.KEY.create()));
+        }
         return menu;
     }
 }

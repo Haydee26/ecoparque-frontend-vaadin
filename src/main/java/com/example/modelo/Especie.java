@@ -1,5 +1,6 @@
 package com.example.modelo;
 
+import java.util.Objects;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +60,23 @@ public class Especie implements Identificable {
 
     public void setHabitats(List<Habitat> habitats) {
         this.habitats = habitats;
+    }
+
+    /** Dos elementos son el mismo si tienen el mismo id (necesario para las listas de seleccion). */
+    @Override
+    public boolean equals(Object otro) {
+        if (this == otro) {
+            return true;
+        }
+        if (!(otro instanceof Especie)) {
+            return false;
+        }
+        Especie elemento = (Especie) otro;
+        return id != null && id.equals(elemento.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

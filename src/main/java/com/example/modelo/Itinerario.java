@@ -1,5 +1,6 @@
 package com.example.modelo;
 
+import java.util.Objects;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,5 +69,23 @@ public class Itinerario implements Identificable {
 
     public void setZonas(List<Zona> zonas) {
         this.zonas = zonas;
+    }
+
+    /** Dos elementos son el mismo si tienen el mismo id (necesario para las listas de seleccion). */
+    @Override
+    public boolean equals(Object otro) {
+        if (this == otro) {
+            return true;
+        }
+        if (!(otro instanceof Itinerario)) {
+            return false;
+        }
+        Itinerario elemento = (Itinerario) otro;
+        return id != null && id.equals(elemento.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

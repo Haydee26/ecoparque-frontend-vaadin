@@ -1,6 +1,6 @@
 package com.example.modelo;
 
-public class Usuario {
+public class Usuario implements Identificable {
 
     private Long id;
     private String nombreUsuario;
@@ -8,6 +8,7 @@ public class Usuario {
     private String rol;
     private String nombrePersona;
 
+    @Override
     public Long getId() {
         return id;
     }

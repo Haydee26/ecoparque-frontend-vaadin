@@ -53,6 +53,11 @@ public abstract class VistaCrud<T extends Identificable> extends VerticalLayout 
 
     protected abstract void configurarColumnas(Grid<T> tabla);
 
+    /** Las pantallas que no permiten modificar (por ejemplo, usuarios) lo desactivan. */
+    protected boolean permiteModificar() {
+        return true;
+    }
+
     /** existente es null cuando se esta registrando uno nuevo. */
     protected abstract Formulario<T> crearFormulario(T existente);
 
@@ -88,13 +93,19 @@ public abstract class VistaCrud<T extends Identificable> extends VerticalLayout 
     }
 
     private HorizontalLayout crearAcciones(T elemento) {
-        Button modificar = new Button("Modificar", evento -> abrirFormulario(elemento));
-        colorear(modificar, COLOR_MODIFICAR);
+        HorizontalLayout acciones = new HorizontalLayout();
+
+        if (permiteModificar()) {
+            Button modificar = new Button("Modificar", evento -> abrirFormulario(elemento));
+            colorear(modificar, COLOR_MODIFICAR);
+            acciones.add(modificar);
+        }
 
         Button eliminar = new Button("Eliminar", evento -> confirmarEliminacion(elemento));
         colorear(eliminar, COLOR_ELIMINAR);
+        acciones.add(eliminar);
 
-        return new HorizontalLayout(modificar, eliminar);
+        return acciones;
     }
 
     private void colorear(Button boton, String color) {

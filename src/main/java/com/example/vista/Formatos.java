@@ -1,6 +1,7 @@
 package com.example.vista;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -26,6 +27,18 @@ public final class Formatos {
             return LocalDate.parse(iso).format(FECHA);
         } catch (DateTimeParseException e) {
             return iso;
+        }
+    }
+
+    /** Muestra una hora (hh:mm:ss) como hh:mm. */
+    public static String hora(String texto) {
+        if (texto == null || texto.isBlank()) {
+            return "";
+        }
+        try {
+            return LocalTime.parse(texto).format(DateTimeFormatter.ofPattern("HH:mm"));
+        } catch (DateTimeParseException e) {
+            return texto;
         }
     }
 
