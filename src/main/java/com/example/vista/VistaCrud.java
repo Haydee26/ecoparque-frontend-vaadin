@@ -24,9 +24,9 @@ import org.springframework.web.client.RestClientException;
  */
 public abstract class VistaCrud<T extends Identificable> extends VerticalLayout {
 
- private static final String COLOR_REGISTRAR = "#4f7a3c";
-private static final String COLOR_MODIFICAR = "#b5832d";
-private static final String COLOR_ELIMINAR = "#a8432d";
+    private static final String COLOR_REGISTRAR = "#7a8c5d";
+    private static final String COLOR_MODIFICAR = "#2563eb";
+    private static final String COLOR_ELIMINAR = "#c0392b";
 
     private final ServicioRest<T> servicio;
     private final boolean esAdministrador;
@@ -105,7 +105,14 @@ private static final String COLOR_ELIMINAR = "#a8432d";
 
     private void abrirFormulario(T existente) {
         boolean esNuevo = existente == null;
-        Formulario<T> formulario = crearFormulario(existente);
+        Formulario<T> formulario;
+        try {
+            formulario = crearFormulario(existente);
+        } catch (RestClientException e) {
+            Notification.show("No se pudieron cargar las opciones del formulario.",
+                    4000, Notification.Position.MIDDLE);
+            return;
+        }
 
         Dialog dialogo = new Dialog();
         dialogo.setHeaderTitle(esNuevo ? textoBotonNuevo() : textoModificar());

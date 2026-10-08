@@ -3,6 +3,9 @@ package com.example.vista;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Formas de mostrar datos en pantalla.
@@ -31,5 +34,13 @@ public final class Formatos {
             return "";
         }
         return String.format("%.1f m²", valor);
+    }
+
+    /** Une los nombres de una lista de elementos separados por coma. */
+    public static <T> String unir(List<T> elementos, Function<T, String> nombre) {
+        if (elementos == null || elementos.isEmpty()) {
+            return "";
+        }
+        return elementos.stream().map(nombre).collect(Collectors.joining(", "));
     }
 }

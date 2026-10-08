@@ -20,8 +20,6 @@ public class MainLayout extends AppLayout {
     public MainLayout(SesionUsuario sesion) {
         addToNavbar(crearEncabezado(sesion));
         addToDrawer(crearMenu());
-        //<theme-editor-local-classname>
-        addClassName("main-layout-app-layout-1");
     }
 
     private HorizontalLayout crearEncabezado(SesionUsuario sesion) {
@@ -53,6 +51,8 @@ public class MainLayout extends AppLayout {
         menu.addItem(new SideNavItem("Dashboard", InicioView.class, VaadinIcon.HOME.create()));
         menu.addItem(new SideNavItem("Zonas", ZonaView.class, VaadinIcon.MAP_MARKER.create()));
         menu.addItem(new SideNavItem("Hábitats", HabitatView.class, VaadinIcon.GLOBE.create()));
+        menu.addItem(new SideNavItem("Especies", EspecieView.class, VaadinIcon.LIST.create()));
+        menu.addItem(new SideNavItem("Itinerarios", ItinerarioView.class, VaadinIcon.FLAG.create()));
         menu.addItem(new SideNavItem("Guías", GuiaView.class, VaadinIcon.USER.create()));
         menu.addItem(new SideNavItem("Cuidadores", CuidadorView.class, VaadinIcon.USERS.create()));
         return menu;

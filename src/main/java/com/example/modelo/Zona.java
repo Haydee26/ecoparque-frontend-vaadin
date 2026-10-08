@@ -1,5 +1,7 @@
 package com.example.modelo;
 
+import java.util.Objects;
+
 public class Zona implements Identificable {
 
     private Long id;
@@ -29,5 +31,23 @@ public class Zona implements Identificable {
 
     public void setExtension(Double extension) {
         this.extension = extension;
+    }
+
+    /** Dos zonas son la misma si tienen el mismo id (necesario para las listas de seleccion). */
+    @Override
+    public boolean equals(Object otro) {
+        if (this == otro) {
+            return true;
+        }
+        if (!(otro instanceof Zona)) {
+            return false;
+        }
+        Zona zona = (Zona) otro;
+        return id != null && id.equals(zona.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
