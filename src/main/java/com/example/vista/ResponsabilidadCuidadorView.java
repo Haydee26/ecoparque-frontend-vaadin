@@ -60,6 +60,9 @@ public class ResponsabilidadCuidadorView extends VistaCrud<ResponsabilidadCuidad
         tabla.addColumn(r -> r.getEspecie() == null ? "" : r.getEspecie().getNombreEspanol())
                 .setHeader("Especie");
         tabla.addColumn(r -> Formatos.fecha(r.getFechaDesde())).setHeader("A cargo desde");
+        tabla.addColumn(r -> r.getFechaHasta() == null || r.getFechaHasta().isBlank()
+                ? "Vigente" : Formatos.fecha(r.getFechaHasta()))
+                .setHeader("A cargo hasta");
     }
 
     @Override
@@ -72,6 +75,7 @@ public class ResponsabilidadCuidadorView extends VistaCrud<ResponsabilidadCuidad
         private final ComboBox<Cuidador> cuidador = new ComboBox<>("Cuidador");
         private final ComboBox<Especie> especie = new ComboBox<>("Especie");
         private final DatePicker fechaDesde = new DatePicker("A cargo desde");
+        private final DatePicker fechaHasta = new DatePicker("A cargo hasta (opcional)");
 
         FormularioResponsabilidad(ResponsabilidadCuidador existente, List<Cuidador> cuidadores, List<Especie> especies) {
             cuidador.setItems(cuidadores);
@@ -82,16 +86,17 @@ public class ResponsabilidadCuidadorView extends VistaCrud<ResponsabilidadCuidad
             if (existente != null) {
                 cuidador.setValue(existente.getCuidador());
                 especie.setValue(existente.getEspecie());
-                cargarFecha(existente.getFechaDesde());
+                cargarFecha(fechaDesde, existente.getFechaDesde());
+                cargarFecha(fechaHasta, existente.getFechaHasta());
             }
         }
 
-        private void cargarFecha(String iso) {
+        private void cargarFecha(DatePicker campo, String iso) {
             if (iso == null || iso.isBlank()) {
                 return;
             }
             try {
-                fechaDesde.setValue(LocalDate.parse(iso));
+                campo.setValue(LocalDate.parse(iso));
             } catch (DateTimeParseException e) {
                 // si la fecha guardada no se puede leer, el campo queda vacio
             }
@@ -99,13 +104,16 @@ public class ResponsabilidadCuidadorView extends VistaCrud<ResponsabilidadCuidad
 
         @Override
         public Component[] campos() {
-            return new Component[]{cuidador, especie, fechaDesde};
+            return new Component[]{cuidador, especie, fechaDesde, fechaHasta};
         }
 
         @Override
         public String validar() {
             if (cuidador.isEmpty() || especie.isEmpty() || fechaDesde.isEmpty()) {
-                return "Elegí el cuidador, la especie y la fecha.";
+                return "Elegí el cuidador, la especie y la fecha desde.";
+            }
+            if (!fechaHasta.isEmpty() && fechaHasta.getValue().isBefore(fechaDesde.getValue())) {
+                return "La fecha hasta no puede ser anterior a la fecha desde.";
             }
             return null;
         }
@@ -116,6 +124,7 @@ public class ResponsabilidadCuidadorView extends VistaCrud<ResponsabilidadCuidad
             responsabilidad.setCuidador(cuidador.getValue());
             responsabilidad.setEspecie(especie.getValue());
             responsabilidad.setFechaDesde(fechaDesde.getValue().toString());
+            responsabilidad.setFechaHasta(fechaHasta.isEmpty() ? null : fechaHasta.getValue().toString());
             return responsabilidad;
         }
     }

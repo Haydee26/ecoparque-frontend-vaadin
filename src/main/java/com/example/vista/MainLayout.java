@@ -26,7 +26,7 @@ public class MainLayout extends AppLayout {
         DrawerToggle alternarMenu = new DrawerToggle();
         alternarMenu.getStyle().set("color", "#ffffff");
 
-        H1 titulo = new H1("EcoParque Admin");
+        H1 titulo = new H1("EcoParque");
         titulo.getStyle().set("font-size", "1.25rem").set("margin", "0").set("color", "#ffffff");
 
         Span usuario = new Span("Usuario: " + sesion.nombrePersona() + " (" + sesion.rol() + ")");
@@ -53,12 +53,20 @@ public class MainLayout extends AppLayout {
         menu.addItem(new SideNavItem("Hábitats", HabitatView.class, VaadinIcon.GLOBE.create()));
         menu.addItem(new SideNavItem("Especies", EspecieView.class, VaadinIcon.LIST.create()));
         menu.addItem(new SideNavItem("Itinerarios", ItinerarioView.class, VaadinIcon.FLAG.create()));
-        menu.addItem(new SideNavItem("Guías", GuiaView.class, VaadinIcon.USER.create()));
-        menu.addItem(new SideNavItem("Cuidadores", CuidadorView.class, VaadinIcon.USERS.create()));
+        if (sesion.esAdministrador()) {
+            // El administrador ve los datos completos del personal.
+            menu.addItem(new SideNavItem("Guías", GuiaView.class, VaadinIcon.USER.create()));
+            menu.addItem(new SideNavItem("Cuidadores", CuidadorView.class, VaadinIcon.USERS.create()));
+        } else {
+            // El resto solo ve quienes son las guias y de que son guias, sin datos personales.
+            menu.addItem(new SideNavItem("Guías", GuiasPublicasView.class, VaadinIcon.USER.create()));
+        }
         menu.addItem(new SideNavItem("Asignaciones", AsignacionGuiaView.class, VaadinIcon.CALENDAR.create()));
         menu.addItem(new SideNavItem("Responsabilidades", ResponsabilidadCuidadorView.class,
                 VaadinIcon.CLIPBOARD.create()));
         if (sesion.esAdministrador()) {
+            menu.addItem(new SideNavItem("Registro del parque", RegistroParqueView.class,
+                    VaadinIcon.CHART.create()));
             menu.addItem(new SideNavItem("Usuarios", UsuarioView.class, VaadinIcon.KEY.create()));
         }
         return menu;

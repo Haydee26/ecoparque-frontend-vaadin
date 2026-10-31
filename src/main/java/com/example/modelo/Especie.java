@@ -10,6 +10,8 @@ public class Especie implements Identificable {
     private String nombreEspanol;
     private String nombreCientifico;
     private String descripcion;
+    /** Cantidad de ejemplares (animales) de la especie en el parque. */
+    private Integer cantidadEjemplares;
     private Zona zona;
     private List<Habitat> habitats = new ArrayList<>();
 
@@ -44,6 +46,14 @@ public class Especie implements Identificable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Integer getCantidadEjemplares() {
+        return cantidadEjemplares;
+    }
+
+    public void setCantidadEjemplares(Integer cantidadEjemplares) {
+        this.cantidadEjemplares = cantidadEjemplares;
     }
 
     public Zona getZona() {

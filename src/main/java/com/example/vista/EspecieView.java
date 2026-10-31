@@ -11,6 +11,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
@@ -61,6 +62,8 @@ public class EspecieView extends VistaCrud<Especie> {
                 .setHeader("Zona");
         tabla.addColumn(especie -> Formatos.unir(especie.getHabitats(), Habitat::getNombre))
                 .setHeader("Hábitats");
+        tabla.addColumn(especie -> especie.getCantidadEjemplares() == null ? 0 : especie.getCantidadEjemplares())
+                .setHeader("Ejemplares").setSortable(true);
     }
 
     /** Las opciones de zona y hábitats se piden al backend cada vez que se abre el formulario. */
@@ -74,6 +77,7 @@ public class EspecieView extends VistaCrud<Especie> {
         private final TextField nombreEspanol = new TextField("Nombre en español");
         private final TextField nombreCientifico = new TextField("Nombre científico");
         private final TextArea descripcion = new TextArea("Descripción");
+        private final IntegerField ejemplares = new IntegerField("Cantidad de ejemplares");
         private final ComboBox<Zona> zona = new ComboBox<>("Zona");
         private final CheckboxGroup<Habitat> habitats = new CheckboxGroup<>("Hábitats");
 
@@ -82,11 +86,15 @@ public class EspecieView extends VistaCrud<Especie> {
             zona.setItemLabelGenerator(Zona::getNombre);
             habitats.setItems(todosLosHabitats);
             habitats.setItemLabelGenerator(Habitat::getNombre);
+            ejemplares.setMin(0);
+            ejemplares.setStepButtonsVisible(true);
+            ejemplares.setValue(0);
 
             if (existente != null) {
                 nombreEspanol.setValue(valor(existente.getNombreEspanol()));
                 nombreCientifico.setValue(valor(existente.getNombreCientifico()));
                 descripcion.setValue(valor(existente.getDescripcion()));
+                ejemplares.setValue(existente.getCantidadEjemplares() == null ? 0 : existente.getCantidadEjemplares());
                 zona.setValue(existente.getZona());
                 if (existente.getHabitats() != null) {
                     habitats.setValue(new HashSet<>(existente.getHabitats()));
@@ -100,13 +108,16 @@ public class EspecieView extends VistaCrud<Especie> {
 
         @Override
         public Component[] campos() {
-            return new Component[]{nombreEspanol, nombreCientifico, descripcion, zona, habitats};
+            return new Component[]{nombreEspanol, nombreCientifico, descripcion, ejemplares, zona, habitats};
         }
 
         @Override
         public String validar() {
             if (nombreEspanol.isEmpty() || zona.isEmpty()) {
                 return "Completá el nombre y elegí una zona.";
+            }
+            if (ejemplares.isEmpty() || ejemplares.getValue() < 0) {
+                return "La cantidad de ejemplares tiene que ser 0 o mayor.";
             }
             return null;
         }
@@ -117,6 +128,7 @@ public class EspecieView extends VistaCrud<Especie> {
             especie.setNombreEspanol(nombreEspanol.getValue().trim());
             especie.setNombreCientifico(nombreCientifico.getValue().trim());
             especie.setDescripcion(descripcion.getValue().trim());
+            especie.setCantidadEjemplares(ejemplares.getValue());
             especie.setZona(zona.getValue());
             especie.setHabitats(new ArrayList<>(habitats.getValue()));
             return especie;

@@ -59,7 +59,9 @@ public class AsignacionGuiaView extends VistaCrud<AsignacionGuia> {
                 .setHeader("Guía").setSortable(true);
         tabla.addColumn(asignacion -> asignacion.getItinerario() == null ? "" : asignacion.getItinerario().getCodigo())
                 .setHeader("Itinerario");
-        tabla.addColumn(asignacion -> Formatos.hora(asignacion.getHora())).setHeader("Hora");
+        tabla.addColumn(asignacion -> Formatos.hora(asignacion.getHora())).setHeader("Hora desde");
+        tabla.addColumn(asignacion -> asignacion.getHoraHasta() == null ? "" : Formatos.hora(asignacion.getHoraHasta()))
+                .setHeader("Hora hasta");
     }
 
     @Override
@@ -71,7 +73,8 @@ public class AsignacionGuiaView extends VistaCrud<AsignacionGuia> {
 
         private final ComboBox<Guia> guia = new ComboBox<>("Guía");
         private final ComboBox<Itinerario> itinerario = new ComboBox<>("Itinerario");
-        private final TimePicker hora = new TimePicker("Hora");
+        private final TimePicker hora = new TimePicker("Hora desde");
+        private final TimePicker horaHasta = new TimePicker("Hora hasta");
 
         FormularioAsignacion(AsignacionGuia existente, List<Guia> guias, List<Itinerario> itinerarios) {
             guia.setItems(guias);
@@ -82,16 +85,17 @@ public class AsignacionGuiaView extends VistaCrud<AsignacionGuia> {
             if (existente != null) {
                 guia.setValue(existente.getGuia());
                 itinerario.setValue(existente.getItinerario());
-                cargarHora(existente.getHora());
+                cargarHora(hora, existente.getHora());
+                cargarHora(horaHasta, existente.getHoraHasta());
             }
         }
 
-        private void cargarHora(String texto) {
+        private void cargarHora(TimePicker campo, String texto) {
             if (texto == null || texto.isBlank()) {
                 return;
             }
             try {
-                hora.setValue(LocalTime.parse(texto));
+                campo.setValue(LocalTime.parse(texto));
             } catch (DateTimeParseException e) {
                 // si la hora guardada no se puede leer, el campo queda vacio
             }
@@ -99,13 +103,16 @@ public class AsignacionGuiaView extends VistaCrud<AsignacionGuia> {
 
         @Override
         public Component[] campos() {
-            return new Component[]{guia, itinerario, hora};
+            return new Component[]{guia, itinerario, hora, horaHasta};
         }
 
         @Override
         public String validar() {
-            if (guia.isEmpty() || itinerario.isEmpty() || hora.isEmpty()) {
-                return "Elegí el guía, el itinerario y la hora.";
+            if (guia.isEmpty() || itinerario.isEmpty() || hora.isEmpty() || horaHasta.isEmpty()) {
+                return "Elegí el guía, el itinerario, la hora desde y la hora hasta.";
+            }
+            if (!horaHasta.getValue().isAfter(hora.getValue())) {
+                return "La hora hasta tiene que ser posterior a la hora desde.";
             }
             return null;
         }
@@ -116,6 +123,7 @@ public class AsignacionGuiaView extends VistaCrud<AsignacionGuia> {
             asignacion.setGuia(guia.getValue());
             asignacion.setItinerario(itinerario.getValue());
             asignacion.setHora(hora.getValue().toString());
+            asignacion.setHoraHasta(horaHasta.getValue().toString());
             return asignacion;
         }
     }

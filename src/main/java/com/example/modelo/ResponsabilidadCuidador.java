@@ -6,6 +6,8 @@ public class ResponsabilidadCuidador implements Identificable {
     private Cuidador cuidador;
     private Especie especie;
     private String fechaDesde;
+    /** Fecha en que termina la responsabilidad. Vacia significa que sigue vigente. */
+    private String fechaHasta;
 
     @Override
     public Long getId() {
@@ -38,5 +40,13 @@ public class ResponsabilidadCuidador implements Identificable {
 
     public void setFechaDesde(String fechaDesde) {
         this.fechaDesde = fechaDesde;
+    }
+
+    public String getFechaHasta() {
+        return fechaHasta;
+    }
+
+    public void setFechaHasta(String fechaHasta) {
+        this.fechaHasta = fechaHasta;
     }
 }

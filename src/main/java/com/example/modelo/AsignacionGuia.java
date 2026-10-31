@@ -5,7 +5,10 @@ public class AsignacionGuia implements Identificable {
     private Long id;
     private Guia guia;
     private Itinerario itinerario;
+    /** Hora de inicio ("desde"). */
     private String hora;
+    /** Hora de fin ("hasta"). */
+    private String horaHasta;
 
     @Override
     public Long getId() {
@@ -38,5 +41,13 @@ public class AsignacionGuia implements Identificable {
 
     public void setHora(String hora) {
         this.hora = hora;
+    }
+
+    public String getHoraHasta() {
+        return horaHasta;
+    }
+
+    public void setHoraHasta(String horaHasta) {
+        this.horaHasta = horaHasta;
     }
 }

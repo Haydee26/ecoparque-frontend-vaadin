@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Valida usuario y clave consultando al backend con Basic Auth.
+ * Valida usuario y clave preguntandole al backend quien es.
+ * Si la clave es incorrecta, el backend contesta 401 y RestTemplate lanza una excepcion.
  */
 @Service
 public class AutenticacionService {
@@ -21,23 +22,13 @@ public class AutenticacionService {
         this.backend = backend;
     }
 
-    /** Devuelve el usuario si existe, o null si no se lo encuentra. */
+    /** Devuelve los datos del usuario que se identifica (sin la clave). */
     public Usuario autenticar(String nombreUsuario, String clave) {
         HttpHeaders encabezados = new HttpHeaders();
         encabezados.setBasicAuth(nombreUsuario, clave);
         HttpEntity<Void> entidad = new HttpEntity<>(encabezados);
 
-        Usuario[] usuarios = restTemplate.exchange(backend.url("/api/usuarios"),
-                HttpMethod.GET, entidad, Usuario[].class).getBody();
-
-        if (usuarios == null) {
-            return null;
-        }
-        for (Usuario usuario : usuarios) {
-            if (nombreUsuario.equals(usuario.getNombreUsuario())) {
-                return usuario;
-            }
-        }
-        return null;
+        return restTemplate.exchange(backend.url("/api/usuarios/yo"),
+                HttpMethod.GET, entidad, Usuario.class).getBody();
     }
 }
