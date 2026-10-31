@@ -3,14 +3,20 @@ package com.example.vista;
 import com.example.modelo.Resumen;
 import com.example.seguridad.SoloAdministrador;
 import com.example.servicio.ResumenService;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
+import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import java.util.Locale;
@@ -26,7 +32,49 @@ public class RegistroParqueView extends VerticalLayout {
     private static final Locale LOCAL = Locale.of("es", "AR");
 
     public RegistroParqueView(ResumenService resumenService) {
-        add(new H2("Registro del parque"), panelRegistro(resumenService));
+        add(new H2("Registro del parque"), formularioArea(resumenService), panelRegistro(resumenService));
+    }
+
+    /** Formulario para fijar el nombre y el area total del parque. */
+    private HorizontalLayout formularioArea(ResumenService resumenService) {
+        TextField nombre = new TextField("Nombre del parque");
+        nombre.setValue("EcoParque");
+        NumberField area = new NumberField("Área total (m²)");
+        area.setMin(1);
+        area.setStepButtonsVisible(true);
+        area.setStep(100);
+        try {
+            Resumen actual = resumenService.obtener();
+            if (actual != null && actual.getAreaTotal() != null) {
+                area.setValue(actual.getAreaTotal());
+            }
+        } catch (RuntimeException e) {
+            // Si no se puede leer, el formulario queda vacío.
+        }
+
+        Button guardar = new Button("Guardar área total", evento -> {
+            if (area.getValue() == null || area.getValue() <= 0) {
+                Notification.show("El área total tiene que ser mayor que 0.", 4000, Notification.Position.MIDDLE)
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+                return;
+            }
+            try {
+                resumenService.configurarParque(nombre.getValue(), area.getValue());
+                Notification.show("¡Parque actualizado correctamente!", 3000, Notification.Position.TOP_CENTER);
+                getUI().ifPresent(ui -> ui.getPage().reload());
+            } catch (IllegalStateException e) {
+                Notification.show(e.getMessage(), 5000, Notification.Position.MIDDLE)
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            } catch (RuntimeException e) {
+                Notification.show("No se pudo conectar con el backend. ¿Está encendido?", 4000,
+                        Notification.Position.MIDDLE).addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+        });
+        guardar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        HorizontalLayout formulario = new HorizontalLayout(nombre, area, guardar);
+        formulario.setDefaultVerticalComponentAlignment(com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.BASELINE);
+        return formulario;
     }
 
     private VerticalLayout panelRegistro(ResumenService resumenService) {
