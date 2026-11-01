@@ -1,34 +1,37 @@
-# My Application README
+# EcoParque – Frontend principal (Vaadin)
 
-- [ ] TODO Replace or update this README with instructions relevant to your application
+Pantalla web principal del **Sistema de gestión del Ecoparque**. Trabajo práctico final de **Programación II** – INSPT-UTN, docente Miguel Silva.
 
-To start the application in development mode, import it into your IDE and run the `Application` class. 
-You can also start the application from the command line by running: 
+**Autora:** Haydee (trabajo individual).
 
-```bash
-./mvnw
+Necesita el backend funcionando: https://github.com/Haydee26/ecoparque-backend
+
+## Qué ofrece
+
+- Inicio de sesión y menú según el rol (administrador, guía, cuidador)
+- Zonas, hábitats (con continentes), especies, itinerarios, guías, cuidadores, asignaciones y responsabilidades
+- Solo administrador: usuarios, registro del parque y personal por antigüedad
+
+## Tecnologías
+
+Java, Spring Boot y Vaadin Flow. Se comunica con el backend por REST.
+
+## Cómo ponerlo en marcha
+
+1. Tener el backend corriendo (por defecto en `http://localhost:8080`).
+2. Si el backend está en otra computadora, cambiar `backend.url` en `src/main/resources/application.properties` por su IP (por ejemplo `http://192.168.0.8:8080`).
+3. Desde esta carpeta ejecutar:
+
+```
+mvn spring-boot:run
 ```
 
-To build the application in production mode, run:
+4. Abrir http://localhost:8081 e ingresar.
 
-```bash
-./mvnw package
-```
+## Usuarios de prueba
 
-To build a Docker image, run:
-
-```bash
-docker build -t my-application:latest .
-```
-
-If you use commercial components, pass the license key as a build secret:
-
-```bash
-docker build --secret id=proKey,src=$HOME/.vaadin/proKey .
-```
-
-## Getting Started
-
-The [Quick Start](https://vaadin.com/docs/v25/getting-started/quick-start) tutorial helps you get started with Vaadin in 
-around 10 minutes. This tutorial walks you through building a simple application, introducing the core concepts along 
-the way.
+| Usuario | Clave | Rol |
+|---|---|---|
+| admin | 1234 | Administrador |
+| laura | 1111 | Guía |
+| mario | 2222 | Cuidador |
