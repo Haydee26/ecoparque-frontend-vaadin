@@ -28,8 +28,10 @@ public class GuiasPublicasView extends VerticalLayout {
         tabla.addColumn(guia -> texto(Formatos.unir(guia.getZonas(), zona -> zona)))
                 .setHeader("Lugar / sector");
 
+        BuscadorDeTabla<GuiaPublica> buscador = new BuscadorDeTabla<>(tabla);
+        add(buscador.campo());
         try {
-            tabla.setItems(personalService.guiasPublicas());
+            buscador.cargar(personalService.guiasPublicas());
             add(tabla);
         } catch (RuntimeException e) {
             add(new Paragraph("No se pudo cargar la lista de guías. Verificá que el backend esté funcionando."));

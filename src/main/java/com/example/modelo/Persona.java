@@ -3,16 +3,17 @@ package com.example.modelo;
 import java.util.Objects;
 
 /**
- * Datos que comparten las personas del ecoparque (guias y cuidadores).
- * La fecha de ingreso viaja como texto ISO (aaaa-mm-dd), igual que en el backend.
+ * Rol de un empleado en el parque (guia o cuidador). Los datos personales (nombre completo,
+ * direccion y telefono) los entrega el backend solo para mostrar; se editan en Empleados.
+ * Para dar el rol se manda el id del empleado.
  */
 public abstract class Persona implements Identificable {
 
     private Long id;
+    private Long empleadoId;
     private String nombre;
     private String direccion;
     private String telefono;
-    private String fechaIngreso;
 
     @Override
     public Long getId() {
@@ -21,6 +22,14 @@ public abstract class Persona implements Identificable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getEmpleadoId() {
+        return empleadoId;
+    }
+
+    public void setEmpleadoId(Long empleadoId) {
+        this.empleadoId = empleadoId;
     }
 
     public String getNombre() {
@@ -45,14 +54,6 @@ public abstract class Persona implements Identificable {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public String getFechaIngreso() {
-        return fechaIngreso;
-    }
-
-    public void setFechaIngreso(String fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
     }
 
     /** Dos personas son la misma si son de la misma clase y tienen el mismo id. */

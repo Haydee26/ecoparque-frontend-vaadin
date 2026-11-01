@@ -68,7 +68,9 @@ public class UsuarioView extends VistaCrud<Usuario> {
 
         FormularioUsuario(Usuario existente) {
             this.esNuevo = existente == null;
-            rol.setItems(List.of("ADMINISTRADOR", "GUIA", "CUIDADOR"));
+            rol.setItems(List.of("ADMINISTRADOR", "GUIA", "CUIDADOR", "INVITADO"));
+            nombrePersona.setHelperText("Administrador, guía o cuidador: nombre y apellido del empleado, como figura en Empleados. "
+                    + "Invitado: el nombre que quieras mostrar.");
 
             if (!esNuevo) {
                 nombreUsuario.setValue(valor(existente.getNombreUsuario()));
