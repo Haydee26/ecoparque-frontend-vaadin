@@ -9,6 +9,7 @@ import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -86,6 +87,8 @@ public abstract class VistaCrud<T extends Identificable> extends VerticalLayout 
         if (esAdministrador) {
             tabla.addComponentColumn(this::crearAcciones).setHeader("Acciones");
         }
+        // Si un texto es largo, baja a otra línea en vez de quedar cortado.
+        tabla.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
         tabla.setAllRowsVisible(true);
         add(tabla);
 

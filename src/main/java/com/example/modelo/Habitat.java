@@ -1,6 +1,8 @@
 package com.example.modelo;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Habitat implements Identificable {
 
@@ -8,6 +10,7 @@ public class Habitat implements Identificable {
     private String nombre;
     private String clima;
     private String vegetacionPredominante;
+    private Set<String> continentes = new LinkedHashSet<>();
 
     @Override
     public Long getId() {
@@ -40,6 +43,14 @@ public class Habitat implements Identificable {
 
     public void setVegetacionPredominante(String vegetacionPredominante) {
         this.vegetacionPredominante = vegetacionPredominante;
+    }
+
+    public Set<String> getContinentes() {
+        return continentes;
+    }
+
+    public void setContinentes(Set<String> continentes) {
+        this.continentes = continentes == null ? new LinkedHashSet<>() : continentes;
     }
 
     /** Dos habitats son el mismo si tienen el mismo id (necesario para las listas de seleccion). */

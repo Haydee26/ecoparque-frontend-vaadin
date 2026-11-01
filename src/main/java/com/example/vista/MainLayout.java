@@ -65,6 +65,7 @@ public class MainLayout extends AppLayout {
         menu.addItem(new SideNavItem("Responsabilidades", ResponsabilidadCuidadorView.class,
                 VaadinIcon.CLIPBOARD.create()));
         if (sesion.esAdministrador()) {
+            menu.addItem(new SideNavItem("Antigüedad", AntiguedadView.class, VaadinIcon.TIMER.create()));
             menu.addItem(new SideNavItem("Registro del parque", RegistroParqueView.class,
                     VaadinIcon.CHART.create()));
             menu.addItem(new SideNavItem("Usuarios", UsuarioView.class, VaadinIcon.KEY.create()));
