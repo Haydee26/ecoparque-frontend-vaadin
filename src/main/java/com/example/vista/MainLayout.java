@@ -58,6 +58,7 @@ public class MainLayout extends AppLayout {
 
         SubMenu parque = barra.addItem(etiqueta("Parque ▾")).getSubMenu();
         parque.addItem("Zonas", evento -> UI.getCurrent().navigate(ZonaView.class));
+        parque.addItem("Mapa del parque", evento -> UI.getCurrent().navigate(MapaParqueView.class));
         parque.addItem("Hábitats", evento -> UI.getCurrent().navigate(HabitatView.class));
         parque.addItem("Especies", evento -> UI.getCurrent().navigate(EspecieView.class));
         parque.addItem("Itinerarios", evento -> UI.getCurrent().navigate(ItinerarioView.class));
@@ -98,6 +99,7 @@ public class MainLayout extends AppLayout {
 
         SideNav parque = new SideNav("Parque");
         parque.addItem(new SideNavItem("Zonas", ZonaView.class, VaadinIcon.MAP_MARKER.create()));
+        parque.addItem(new SideNavItem("Mapa del parque", MapaParqueView.class, VaadinIcon.LOCATION_ARROW.create()));
         parque.addItem(new SideNavItem("Hábitats", HabitatView.class, VaadinIcon.GLOBE.create()));
         parque.addItem(new SideNavItem("Especies", EspecieView.class, VaadinIcon.LIST.create()));
         parque.addItem(new SideNavItem("Itinerarios", ItinerarioView.class, VaadinIcon.FLAG.create()));
