@@ -10,4 +10,5 @@ public class HabitatService extends ServicioRest<Habitat> {
     public HabitatService(BackendConfig backend, SesionUsuario sesion) {
         super(backend, sesion, "/api/habitats", Habitat.class, Habitat[].class);
     }
+    
 }

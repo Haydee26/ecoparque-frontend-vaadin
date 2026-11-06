@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * Antes de mostrar cualquier pantalla verifica dos cosas:
- * que haya una sesion iniciada y, si la pantalla esta marcada como
- * @SoloAdministrador, que quien entro sea administrador.
+ * que haya una sesion iniciada y que el rol del usuario tenga el permiso
+ * de ver esa pantalla (ver la clase Permisos).
  */
 @Component
 public class ControlDeAcceso implements VaadinServiceInitListener {
@@ -37,7 +37,7 @@ public class ControlDeAcceso implements VaadinServiceInitListener {
             evento.rerouteTo(LoginView.class);
             return;
         }
-        if (destino.isAnnotationPresent(SoloAdministrador.class) && !sesion.esAdministrador()) {
+        if (!sesion.puedeVer(destino)) {
             evento.rerouteTo(InicioView.class);
         }
     }

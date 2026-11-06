@@ -7,21 +7,26 @@ import com.example.servicio.ItinerarioService;
 import com.example.servicio.ZonaService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import java.util.List;
 
 @Route(value = "zonas", layout = MainLayout.class)
 @PageTitle("Zonas | EcoParque")
 public class ZonaView extends VistaCrud<Zona> {
 
     private final PanelZonas panel;
+    private final ZonaService zonaServicio;
 
     public ZonaView(ZonaService servicio, EspecieService especieService,
             ItinerarioService itinerarioService, SesionUsuario sesion) {
         super(Zona.class, servicio, sesion);
+        this.zonaServicio = servicio;
         this.panel = new PanelZonas(servicio, especieService, itinerarioService);
     }
 
@@ -68,7 +73,11 @@ public class ZonaView extends VistaCrud<Zona> {
 
     @Override
     protected Formulario<Zona> crearFormulario(Zona existente) {
-        return new FormularioZona(existente);
+        // Las demás zonas (sin la que se modifica): ocupan lugar en el mapa del formulario.
+        List<Zona> otras = zonaServicio.listar().stream()
+                .filter(zona -> existente == null || !java.util.Objects.equals(zona.getId(), existente.getId()))
+                .toList();
+        return new FormularioZona(existente, otras);
     }
 
     private static class FormularioZona implements Formulario<Zona> {
@@ -80,7 +89,9 @@ public class ZonaView extends VistaCrud<Zona> {
         private final IntegerField ancho = new IntegerField("Ancho (casilleros)");
         private final IntegerField alto = new IntegerField("Alto (casilleros)");
 
-        FormularioZona(Zona existente) {
+        private final SelectorDeLugar selector;
+
+        FormularioZona(Zona existente, List<Zona> otras) {
             if (existente != null) {
                 nombre.setValue(existente.getNombre() == null ? "" : existente.getNombre());
                 if (existente.getExtension() != null) {
@@ -91,16 +102,21 @@ public class ZonaView extends VistaCrud<Zona> {
                 ancho.setValue(existente.getAncho());
                 alto.setValue(existente.getAlto());
             }
-            columna.setHelperText("Mirá el mapa: la esquina superior izquierda de la zona.");
             for (IntegerField campo : new IntegerField[]{columna, fila, ancho, alto}) {
                 campo.setMin(1);
                 campo.setStepButtonsVisible(true);
+                campo.setWidth("9em");
             }
+            selector = new SelectorDeLugar(otras, columna, fila, ancho, alto);
         }
 
         @Override
         public Component[] campos() {
-            return new Component[]{nombre, extension, columna, fila, ancho, alto};
+            HorizontalLayout datos = new HorizontalLayout(nombre, extension);
+            HorizontalLayout medidas = new HorizontalLayout(columna, fila, ancho, alto);
+            VerticalLayout contenido = new VerticalLayout(datos, selector, medidas);
+            contenido.setPadding(false);
+            return new Component[]{contenido};
         }
 
         @Override
@@ -113,7 +129,7 @@ public class ZonaView extends VistaCrud<Zona> {
             if (cargados > 0 && cargados < 4) {
                 return "Para ubicar la zona en el mapa completá columna, fila, ancho y alto (o dejá los cuatro vacíos).";
             }
-            return null;
+            return selector.problemaActual();
         }
 
         @Override

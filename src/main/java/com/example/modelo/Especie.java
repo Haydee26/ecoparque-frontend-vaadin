@@ -3,6 +3,7 @@ package com.example.modelo;
 import java.util.Objects;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 public class Especie implements Identificable {
 
@@ -15,6 +16,10 @@ public class Especie implements Identificable {
     private Zona zona;
     private List<Habitat> habitats = new ArrayList<>();
 
+    private boolean enferma;
+    private String observacionSalud;
+    private LocalDate fechaAvisoSalud;
+    private String avisadoPor;
     @Override
     public Long getId() {
         return id;
@@ -72,6 +77,38 @@ public class Especie implements Identificable {
         this.habitats = habitats;
     }
 
+    public boolean isEnferma() {
+        return enferma;
+    }
+
+    public void setEnferma(boolean enferma) {
+        this.enferma = enferma;
+    }
+
+    public String getObservacionSalud() {
+        return observacionSalud;
+    }
+
+    public void setObservacionSalud(String observacionSalud) {
+        this.observacionSalud = observacionSalud;
+    }
+
+    public LocalDate getFechaAvisoSalud() {
+        return fechaAvisoSalud;
+    }
+
+    public void setFechaAvisoSalud(LocalDate fechaAvisoSalud) {
+        this.fechaAvisoSalud = fechaAvisoSalud;
+    }
+
+    public String getAvisadoPor() {
+        return avisadoPor;
+    }
+
+    public void setAvisadoPor(String avisadoPor) {
+        this.avisadoPor = avisadoPor;
+    }
+    
     /** Dos elementos son el mismo si tienen el mismo id (necesario para las listas de seleccion). */
     @Override
     public boolean equals(Object otro) {

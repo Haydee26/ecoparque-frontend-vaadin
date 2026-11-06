@@ -26,7 +26,8 @@ import org.springframework.web.client.RestClientException;
  * tabla, dialogo de alta/modificacion y confirmacion de borrado). Cada pantalla concreta
  * solo define lo que cambia: textos, columnas y formulario.
  *
- * Solo el administrador ve los botones de registrar, modificar y eliminar.
+ * Solo ve los botones de registrar, modificar y eliminar quien tiene el permiso de editar esa sección
+ * (lo otorga el rol del usuario).
  */
 public abstract class VistaCrud<T extends Identificable> extends VerticalLayout {
 
@@ -42,7 +43,7 @@ public abstract class VistaCrud<T extends Identificable> extends VerticalLayout 
 
     protected VistaCrud(Class<T> tipo, ServicioRest<T> servicio, SesionUsuario sesion) {
         this.servicio = servicio;
-        this.esAdministrador = sesion.esAdministrador();
+        this.esAdministrador = sesion.puedeEditar(getClass());
         this.tabla = new Grid<>(tipo, false);
         setPadding(true);
     }

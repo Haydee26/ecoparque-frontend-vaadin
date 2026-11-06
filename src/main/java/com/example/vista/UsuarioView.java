@@ -2,8 +2,9 @@ package com.example.vista;
 
 import com.example.modelo.Usuario;
 import com.example.seguridad.SesionUsuario;
-import com.example.seguridad.SoloAdministrador;
+import com.example.servicio.RolService;
 import com.example.servicio.UsuarioService;
+import com.example.modelo.Rol;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -14,16 +15,18 @@ import com.vaadin.flow.router.Route;
 import java.util.List;
 
 /**
- * Gestion de usuarios del sistema. Solo para administradores.
+ * Gestion de usuarios del sistema. El rol se elige entre los que existen (los crea el administrador en Roles).
  * Al modificar, la contrasena es opcional: si se deja vacia, se conserva la anterior.
  */
 @Route(value = "usuarios", layout = MainLayout.class)
 @PageTitle("Usuarios | EcoParque")
-@SoloAdministrador
 public class UsuarioView extends VistaCrud<Usuario> {
 
-    public UsuarioView(UsuarioService servicio, SesionUsuario sesion) {
+    private final RolService rolService;
+
+    public UsuarioView(UsuarioService servicio, RolService rolService, SesionUsuario sesion) {
         super(Usuario.class, servicio, sesion);
+        this.rolService = rolService;
     }
 
     @Override
@@ -55,7 +58,8 @@ public class UsuarioView extends VistaCrud<Usuario> {
 
     @Override
     protected Formulario<Usuario> crearFormulario(Usuario existente) {
-        return new FormularioUsuario(existente);
+        List<String> roles = rolService.listar().stream().map(Rol::getNombre).toList();
+        return new FormularioUsuario(existente, roles);
     }
 
     private static class FormularioUsuario implements Formulario<Usuario> {
@@ -66,11 +70,11 @@ public class UsuarioView extends VistaCrud<Usuario> {
         private final ComboBox<String> rol = new ComboBox<>("Rol");
         private final TextField nombrePersona = new TextField("Nombre de la persona");
 
-        FormularioUsuario(Usuario existente) {
+        FormularioUsuario(Usuario existente, List<String> roles) {
             this.esNuevo = existente == null;
-            rol.setItems(List.of("ADMINISTRADOR", "GUIA", "CUIDADOR", "INVITADO"));
+            rol.setItems(roles);
             nombrePersona.setHelperText("Administrador, guía o cuidador: nombre y apellido del empleado, como figura en Empleados. "
-                    + "Invitado: el nombre que quieras mostrar.");
+                    + "Invitado o un rol nuevo: el nombre que quieras mostrar (si es un empleado, su nombre y apellido).");
 
             if (!esNuevo) {
                 nombreUsuario.setValue(valor(existente.getNombreUsuario()));
