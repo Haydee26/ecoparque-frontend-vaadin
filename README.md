@@ -43,4 +43,4 @@ Si el puerto 8081 está ocupado por una ejecución anterior, cerrar ese proceso 
 | laura | 1111 | Guía |
 | mario | 2222 | Cuidador |
 | invitado | 3333 | Invitado |
-| vet | 4444 | Veterinario |
+| sofi | 5555 | Veterinario |
