@@ -200,7 +200,7 @@ public class MapaParqueView extends VerticalLayout {
             }
             hay = true;
             int cantidad = especie.getCantidadEjemplares() == null ? 0 : especie.getCantidadEjemplares();
-            cuerpo.add(new Span("• " + especie.getNombreEspanol() + " (" + cantidad + " ejemplares)"));
+                    cuerpo.add(new Span("• " + especie.getNombreCientifico() + " (" + cantidad + " ejemplares)"));
             if (especie.getHabitats() != null) {
                 for (Habitat h : especie.getHabitats()) {
                     habitats.add(h.getNombre());

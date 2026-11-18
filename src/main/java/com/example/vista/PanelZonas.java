@@ -127,7 +127,7 @@ public class PanelZonas extends VerticalLayout {
             }
             cantidad++;
             int ejemplares = especie.getCantidadEjemplares() == null ? 0 : especie.getCantidadEjemplares();
-            Div linea = new Div(new Span("• " + especie.getNombreEspanol() + " (" + ejemplares + ")"));
+                        Div linea = new Div(new Span("• " + especie.getNombreCientifico() + " (" + ejemplares + ")"));
             listaEspecies.add(linea);
             if (especie.getHabitats() != null) {
                 for (Habitat h : especie.getHabitats()) {

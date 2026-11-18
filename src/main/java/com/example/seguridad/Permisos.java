@@ -13,7 +13,8 @@ import com.example.vista.ResponsabilidadCuidadorView;
 import com.example.vista.RolView;
 import com.example.vista.UsuarioView;
 import com.example.vista.ZonaView;
-import com.example.vista.EspeciesEnfermasView;
+import com.example.vista.SaludEspecimenesView;
+import com.example.vista.EspecimenView;
 import java.util.Map;
 
 /**
@@ -37,7 +38,8 @@ public final class Permisos {
             Map.entry(UsuarioView.class, "USUARIOS"),
             Map.entry(RolView.class, "ROLES"),
             Map.entry(RegistroParqueView.class, "PARQUE"),
-            Map.entry(EspeciesEnfermasView.class, "SALUD"));
+            Map.entry(EspecimenView.class, "ESPECIMENES"),
+            Map.entry(SaludEspecimenesView.class, "SALUD"));
 
     private Permisos() {
     }

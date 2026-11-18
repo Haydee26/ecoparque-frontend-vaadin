@@ -66,8 +66,9 @@ public class MainLayout extends AppLayout {
         parque.add(new Opcion("Mapa del parque", MapaParqueView.class, VaadinIcon.LOCATION_ARROW));
         parque.add(new Opcion("Hábitats", HabitatView.class, VaadinIcon.GLOBE));
         parque.add(new Opcion("Especies", EspecieView.class, VaadinIcon.LIST));
+        parque.add(new Opcion("Especímenes", EspecimenView.class, VaadinIcon.CLUSTER));
         parque.add(new Opcion("Itinerarios", ItinerarioView.class, VaadinIcon.FLAG));
-        parque.add(new Opcion("Especies enfermas", EspeciesEnfermasView.class, VaadinIcon.WARNING));
+        parque.add(new Opcion("Salud de los especímenes", SaludEspecimenesView.class, VaadinIcon.WARNING));
         agregarGrupo(barra, "Parque ▾", parque, sesion);
 
         List<Opcion> actividad = new ArrayList<>();
@@ -150,8 +151,9 @@ public class MainLayout extends AppLayout {
         parque.add(new Opcion("Mapa del parque", MapaParqueView.class, VaadinIcon.LOCATION_ARROW));
         parque.add(new Opcion("Hábitats", HabitatView.class, VaadinIcon.GLOBE));
         parque.add(new Opcion("Especies", EspecieView.class, VaadinIcon.LIST));
+        parque.add(new Opcion("Especímenes", EspecimenView.class, VaadinIcon.CLUSTER));
         parque.add(new Opcion("Itinerarios", ItinerarioView.class, VaadinIcon.FLAG));
-        parque.add(new Opcion("Especies enfermas", EspeciesEnfermasView.class, VaadinIcon.WARNING));
+        parque.add(new Opcion("Salud de los especímenes", SaludEspecimenesView.class, VaadinIcon.WARNING));
         agregarSeccion(menu, "Parque", parque, sesion);
         List<Opcion> actividad = new ArrayList<>();
         actividad.add(new Opcion("Asignaciones de guías", AsignacionGuiaView.class, VaadinIcon.CALENDAR));

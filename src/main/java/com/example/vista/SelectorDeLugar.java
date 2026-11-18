@@ -13,9 +13,10 @@ import java.util.List;
 
 /**
  * Mini mapa para elegir el lugar de una zona al cargarla o modificarla: muestra los casilleros
- * ocupados (con el nombre de cada zona) y los libres. Tocando un casillero libre se completan
- * columna y fila; el rectángulo elegido se pinta de verde si entra y de rojo si se pisa con otra
- * zona o se sale del mapa. "Buscar lugar libre" encuentra solo el primer hueco del tamaño pedido.
+ * ocupados (con el nombre de cada zona) y los libres. Primer clic: marca un solo casillero (1x1).
+ * Segundo clic: marca el rectangulo entre los dos casilleros tocados. El rectangulo se pinta de
+ * verde si entra y de rojo si se pisa con otra zona o se sale del mapa.
+ * "Buscar lugar libre" encuentra solo el primer hueco del tamaño pedido.
  */
 class SelectorDeLugar extends VerticalLayout {
 
@@ -31,6 +32,10 @@ class SelectorDeLugar extends VerticalLayout {
     private final Div cuadricula = new Div();
     private final Span mensaje = new Span();
     private boolean cambiandoCampos = false;
+
+    // CAMBIO: primer casillero tocado; queda guardado esperando un posible segundo clic.
+    private Integer esquinaColumna = null;
+    private Integer esquinaFila = null;
 
     /**
      * @param otras zonas que ya ocupan lugar (sin la que se está modificando)
@@ -51,14 +56,19 @@ class SelectorDeLugar extends VerticalLayout {
                 .set("border-radius", "8px").set("width", "fit-content");
 
         Button buscar = new Button("Buscar lugar libre", evento -> buscarLugarLibre());
+        // CAMBIO: "Dejar sin ubicar" tambien olvida el primer clic.
         Button quitar = new Button("Dejar sin ubicar", evento -> {
+            esquinaColumna = null;
+            esquinaFila = null;
             cambiarCampos(null, null, null, null);
         });
         HorizontalLayout botones = new HorizontalLayout(buscar, quitar);
         botones.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 
         mensaje.getStyle().set("font-size", "var(--lumo-font-size-s)");
-        Span ayuda = new Span("Tocá un casillero libre para poner ahí la esquina superior izquierda de la zona.");
+        // CAMBIO: texto de ayuda nuevo.
+        Span ayuda = new Span("Tocá un casillero libre para marcarlo. Si la zona es más grande, "
+                + "tocá después el casillero de la esquina opuesta.");
         ayuda.getStyle().set("font-size", "var(--lumo-font-size-s)").set("color", "var(--lumo-secondary-text-color)");
 
         add(ayuda, cuadricula, mensaje, botones);
@@ -66,6 +76,9 @@ class SelectorDeLugar extends VerticalLayout {
         for (IntegerField campo : new IntegerField[]{columna, fila, ancho, alto}) {
             campo.addValueChangeListener(evento -> {
                 if (!cambiandoCampos) {
+                    // CAMBIO: si el usuario escribe los numeros a mano, se olvida el primer clic.
+                    esquinaColumna = null;
+                    esquinaFila = null;
                     dibujar();
                 }
             });
@@ -174,10 +187,26 @@ class SelectorDeLugar extends VerticalLayout {
 
     // ------------------------------------------------ acciones
 
+    /**
+     * CAMBIO: primer clic marca solo ese casillero (zona de 1x1).
+     * Segundo clic marca el rectangulo entre los dos casilleros tocados.
+     */
     private void elegirCasillero(int c, int f) {
-        int a = ancho.isEmpty() ? 2 : ancho.getValue();
-        int h = alto.isEmpty() ? 2 : alto.getValue();
-        cambiarCampos(c, f, a, h);
+        if (esquinaColumna == null) {
+            esquinaColumna = c;
+            esquinaFila = f;
+            cambiarCampos(c, f, 1, 1);
+            return;
+        }
+        // Segundo clic: los dos casilleros son esquinas opuestas, en cualquier direccion.
+        int columnaInicio = Math.min(esquinaColumna, c);
+        int filaInicio = Math.min(esquinaFila, f);
+        int anchoElegido = Math.abs(c - esquinaColumna) + 1;
+        int altoElegido = Math.abs(f - esquinaFila) + 1;
+        esquinaColumna = null;
+        esquinaFila = null;
+        // Si el rectangulo pisa otra zona, dibujar() lo pinta de rojo y no deja guardar.
+        cambiarCampos(columnaInicio, filaInicio, anchoElegido, altoElegido);
     }
 
     private void buscarLugarLibre() {

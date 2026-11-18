@@ -49,7 +49,7 @@ public class ResponsabilidadCuidadorView extends VistaCrud<ResponsabilidadCuidad
     @Override
     protected String describir(ResponsabilidadCuidador responsabilidad) {
         String cuidador = responsabilidad.getCuidador() == null ? "" : responsabilidad.getCuidador().getNombre();
-        String especie = responsabilidad.getEspecie() == null ? "" : responsabilidad.getEspecie().getNombreEspanol();
+        String especie = responsabilidad.getEspecie() == null ? "" : responsabilidad.getEspecie().getNombreCientifico();
         return cuidador + " a cargo de " + especie;
     }
 
@@ -57,7 +57,7 @@ public class ResponsabilidadCuidadorView extends VistaCrud<ResponsabilidadCuidad
     protected void configurarColumnas(Grid<ResponsabilidadCuidador> tabla) {
         tabla.addColumn(r -> r.getCuidador() == null ? "" : r.getCuidador().getNombre())
                 .setHeader("Cuidador").setSortable(true);
-        tabla.addColumn(r -> r.getEspecie() == null ? "" : r.getEspecie().getNombreEspanol())
+                tabla.addColumn(r -> r.getEspecie() == null ? "" : r.getEspecie().getNombreCientifico())
                 .setHeader("Especie");
         tabla.addColumn(r -> Formatos.fecha(r.getFechaDesde())).setHeader("A cargo desde");
         tabla.addColumn(r -> r.getFechaHasta() == null || r.getFechaHasta().isBlank()
@@ -81,7 +81,7 @@ public class ResponsabilidadCuidadorView extends VistaCrud<ResponsabilidadCuidad
             cuidador.setItems(cuidadores);
             cuidador.setItemLabelGenerator(Cuidador::getNombre);
             especie.setItems(especies);
-            especie.setItemLabelGenerator(Especie::getNombreEspanol);
+            especie.setItemLabelGenerator(Especie::getNombreCientifico);
 
             if (existente != null) {
                 cuidador.setValue(existente.getCuidador());

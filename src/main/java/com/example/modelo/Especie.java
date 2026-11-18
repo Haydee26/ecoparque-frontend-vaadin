@@ -1,25 +1,23 @@
 package com.example.modelo;
 
-import java.util.Objects;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
+import java.util.Objects;
 
+/**
+ * Copia de la especie del backend: solo la descripcion.
+ * La cantidad de ejemplares viene calculada por el backend (no se carga a mano).
+ */
 public class Especie implements Identificable {
 
     private Long id;
-    private String nombreEspanol;
     private String nombreCientifico;
     private String descripcion;
-    /** Cantidad de ejemplares (animales) de la especie en el parque. */
+    /** Cantidad de especimenes de la especie. La calcula el backend. */
     private Integer cantidadEjemplares;
     private Zona zona;
     private List<Habitat> habitats = new ArrayList<>();
 
-    private boolean enferma;
-    private String observacionSalud;
-    private LocalDate fechaAvisoSalud;
-    private String avisadoPor;
     @Override
     public Long getId() {
         return id;
@@ -27,14 +25,6 @@ public class Especie implements Identificable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getNombreEspanol() {
-        return nombreEspanol;
-    }
-
-    public void setNombreEspanol(String nombreEspanol) {
-        this.nombreEspanol = nombreEspanol;
     }
 
     public String getNombreCientifico() {
@@ -57,6 +47,7 @@ public class Especie implements Identificable {
         return cantidadEjemplares;
     }
 
+    /** Lo usa Jackson al recibir el JSON del backend. */
     public void setCantidadEjemplares(Integer cantidadEjemplares) {
         this.cantidadEjemplares = cantidadEjemplares;
     }
@@ -77,38 +68,6 @@ public class Especie implements Identificable {
         this.habitats = habitats;
     }
 
-    public boolean isEnferma() {
-        return enferma;
-    }
-
-    public void setEnferma(boolean enferma) {
-        this.enferma = enferma;
-    }
-
-    public String getObservacionSalud() {
-        return observacionSalud;
-    }
-
-    public void setObservacionSalud(String observacionSalud) {
-        this.observacionSalud = observacionSalud;
-    }
-
-    public LocalDate getFechaAvisoSalud() {
-        return fechaAvisoSalud;
-    }
-
-    public void setFechaAvisoSalud(LocalDate fechaAvisoSalud) {
-        this.fechaAvisoSalud = fechaAvisoSalud;
-    }
-
-    public String getAvisadoPor() {
-        return avisadoPor;
-    }
-
-    public void setAvisadoPor(String avisadoPor) {
-        this.avisadoPor = avisadoPor;
-    }
-    
     /** Dos elementos son el mismo si tienen el mismo id (necesario para las listas de seleccion). */
     @Override
     public boolean equals(Object otro) {
