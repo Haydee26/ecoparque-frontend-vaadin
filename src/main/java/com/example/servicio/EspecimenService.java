@@ -25,8 +25,8 @@ public class EspecimenService extends ServicioRest<Especimen> {
 
     public EspecimenService(BackendConfig backend, SesionUsuario sesion) {
         super(backend, sesion, "/api/especimenes", Especimen.class, Especimen[].class);
-        this.backend = backend;
-        this.sesion = sesion;
+        this.backend = backend; // direccion 
+        this.sesion = sesion; // firma
     }
 
     /**

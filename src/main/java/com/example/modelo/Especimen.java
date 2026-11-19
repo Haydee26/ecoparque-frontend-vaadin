@@ -16,6 +16,8 @@ public class Especimen implements Identificable{
     private LocalDate fechaIngreso;
     private EstadoSalud estadoSalud = EstadoSalud.SANO;
     private String observacionSalud;
+    private String avisadoPor;
+    private LocalDate fechaAvisoSalud;
 
     @Override
     public Long getId() {
@@ -66,6 +68,21 @@ public class Especimen implements Identificable{
         this.observacionSalud = observacionSalud;
     }
     
+        public String getAvisadoPor() {
+        return avisadoPor;
+    }
+
+    public void setAvisadoPor(String avisadoPor) {
+        this.avisadoPor = avisadoPor;
+    }
+
+    public LocalDate getFechaAvisoSalud() {
+        return fechaAvisoSalud;
+    }
+
+    public void setFechaAvisoSalud(LocalDate fechaAvisoSalud) {
+        this.fechaAvisoSalud = fechaAvisoSalud;
+    }
     
       /* Dos especimenes son el mismo si tienen el mismo id (necesario para las tablas y listas). */
     @Override

@@ -16,8 +16,8 @@ import java.util.List;
 import org.springframework.web.client.RestClientException;
 
 /**
- * Lista los especimenes que no estan sanos (enfermos o en tratamiento).
- * Entra quien tiene el permiso SALUD_VER (administrador y veterinario).
+ * Lista los especimenes que no estan sanos (enfermos o en tratamiento). Entra
+ * quien tiene el permiso SALUD_VER (administrador y veterinario).
  */
 @Route(value = "salud-especimenes", layout = MainLayout.class)
 @PageTitle("Salud de los especímenes | EcoParque")
@@ -41,7 +41,11 @@ public class SaludEspecimenesView extends VerticalLayout {
                 .setHeader("Estado").setSortable(true);
         tabla.addColumn(e -> e.getObservacionSalud() == null ? "" : e.getObservacionSalud())
                 .setHeader("Qué le pasa").setFlexGrow(3).setWidth("300px");
-
+        tabla.addColumn(e -> e.getAvisadoPor() == null ? "" : e.getAvisadoPor())
+                .setHeader("Avisó");
+        tabla.addColumn(e -> e.getFechaAvisoSalud() == null ? ""
+                : Formatos.fecha(e.getFechaAvisoSalud().toString()))
+                .setHeader("Fecha del aviso");
         // Solo quien tiene SALUD_EDITAR ve el boton (veterinario y administrador).
         if (sesion.tiene("SALUD_EDITAR")) {
             tabla.addComponentColumn(e -> new Button("Cambiar salud",
@@ -56,7 +60,10 @@ public class SaludEspecimenesView extends VerticalLayout {
         actualizar();
     }
 
-    /** Pide al backend los que no estan sanos; si no hay ninguno, muestra el cartel. */
+    /**
+     * Pide al backend los que no estan sanos; si no hay ninguno, muestra el
+     * cartel.
+     */
     private void actualizar() {
         try {
             List<Especimen> noSanos = especimenService.listarNoSanos();
